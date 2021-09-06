@@ -19,7 +19,7 @@ function doLogin() {
         FB.api(`https://graph.facebook.com/${userID}?fields=id,name,email,picture&access_token=${accessToken}`,function(res){
         (async function(facebookid, accesstoken,email,name){
           console.log(facebookid, accesstoken, email, name);
-          const result = await fetch('http://https://serene-dawn-33480.herokuapp.com//login',{
+          const result = await fetch('https://serene-dawn-33480.herokuapp.com/login',{
             headers: {
               'Content-Type': 'application/json'
             },
