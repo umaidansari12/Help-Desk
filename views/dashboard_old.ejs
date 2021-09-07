@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Meta Tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<meta name="description" content="">
+
+<!-- Page Title & Favicon -->
+<title>RichPanel-HelpDesk</title>
+
+<!-- Stylesheets -->
+<link rel="stylesheet" href="assets/stylesheets/main.css">
+
+<!-- Javascript -->
+<script src="https://kit.fontawesome.com/b06605e970.js"></script>
+<script src="scripts/config.js"></script>
+<script>
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: CONFIG.APPID,
+        cookie: true,
+        xfbml: true,
+        version: CONFIG.VERSION,
+      });
+
+      FB.AppEvents.logPageView();
+    };
+
+    (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {
+        return;
+      }
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    })(document, "script", "facebook-jssdk");
+    window.addEventListener('load',function(){
+
+    })
+
+</script>
+</head>
+<body>
+
+    <div id="container">
+        <div class="row">
+            <div class="col-1 col">
+                <nav id="main-nav">
+                    <ul>
+                        <li>
+                            <a href="#">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        </li>
+                        <li class="active">
+                            <a href="#">
+                                <i class="fas fa-envelope"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-user-friends"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fas fa-chart-line"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="active-user">
+                        <a href="#">
+                            <img src="assets/images/user_1.png" class="w-100" alt="image">
+                        </a>
+                    </div>
+                </nav>
+
+            </div>
+            <div class="col-2 col">
+                <div class="conversations">
+                    <header class="conv-header">
+                        <div class="row align-items-center justify-content-between">
+                            <div class="col">
+                                <div class="row align-items-center">
+                                    <div class="sub-col-1 sub-col">
+                                        <a href="#">
+                                            <i class="fas fa-align-left"></i>
+                                        </a>
+                                    </div>
+                                    <div class="sub-col-2 sub-col">
+                                        <h3>Conversations</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <a href="#">
+                                    <i class="fas fa-redo"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </header>
+
+                    <div class="conv-list">
+                        <ul>
+                            <li class="active">
+                                <div class="row justify-content-between">
+                                    <div class="username">
+                                        <div class="row align-items-center">
+                                            <div class="checkbox">
+                                                <input type="checkbox">
+                                            </div>
+                                            <div class="name">
+                                                <p>Amit RG</p>
+                                                <span>Facebook DM</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="time">
+                                        <span>10m</span>
+                                    </div>
+                                </div>
+
+                                <div class="msg">
+                                    <h5>Awesome Product</h5>
+                                    <p>
+                                        Hey There! I probably did one of the best...
+                                    </p>
+                                </div>
+                            </li>
+
+                            <li>
+                                <div class="row justify-content-between">
+                                    <div class="username">
+                                        <div class="row align-items-center">
+                                            <div class="checkbox">
+                                                <input type="checkbox">
+                                            </div>
+                                            <div class="name">
+                                                <p>Amit RG</p>
+                                                <span>Facebook DM</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="time">
+                                        <span>10m</span>
+                                    </div>
+                                </div>
+
+                                <div class="msg">
+                                    <h5>Awesome Product</h5>
+                                    <p>
+                                        Hey There! I probably did one of the best...
+                                    </p>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-3 col">
+                <div class="chat-section">
+                    <header class="chat-header">
+                        <h3>Amit RG</h3>
+                    </header>
+
+                    <main class="chat">
+                        <ul>
+                            <li class="clear message cli-msg text-left">
+                                <div class="msg-wrapper">
+                                    <div class="row align-items-center">
+                                        <div class="dp">
+                                            <img class="w-100" src="assets/images/user_1.png" alt="dp">
+                                        </div>
+                                        <div class="msg-text">
+                                            <p>Is it in stock right now?</p>
+                                            <span>Amit RG - Mar 05, 2:22 AM</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="clear message reply-msg text-right">
+                                <div class="msg-wrapper">
+                                    <div class="row align-items-center">
+                                        <div class="msg-text">
+                                            <p>We've 3 left in stock!</p>
+                                            <!-- <span>Amit RG - Mar 05, 2:22 AM</span> -->
+                                        </div>
+                                        <div class="dp">
+                                            <!-- <img class="w-100" src="assets/images/user_1.png" alt="dp"> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+
+                            <li class="clear message reply-msg text-right">
+                                <div class="msg-wrapper">
+                                    <div class="row align-items-center">
+                                        <div class="msg-text">
+                                            <p>If you order before 8pm we can ship it today</p>
+                                            <span>Amit RG - Mar 05, 2:22 AM</span>
+                                        </div>
+                                        <div class="dp">
+                                            <img class="w-100" src="assets/images/user_1.png" alt="dp">
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </main>
+
+                    <div class="send-msg">
+                        <form action="#">
+                            <input type="text" id="sendtxt" placeholder="Message Hiten Saxena">
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+            <div class="col-4 col">
+                <div class="user">
+                    <div class="dp">
+                        <img class="w-100" src="assets/images/user_1.png" alt="dp">
+                    </div>
+                    <h4>Amit RG</h4>
+                    <span class="text-muted">Offline</span>
+                    <div class="action">
+                        <div class="row justify-content-center">
+                            <div class="call">
+                                <a class="btn" href="#">
+                                    <i class="fas fa-phone"></i> Call
+                                </a>
+                            </div>
+                            <div class="profile">
+                                <a class="btn" href="#">
+                                    <i class="fas fa-user"></i> Profile
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="user-details">
+                    <div class="wrapper">
+                        <h5>Customer details</h5>
+                    <ul>
+                        <li>
+                            <div class="row justify-content-between">
+                                <div class="attr">
+                                    <span>Email</span>
+                                </div>
+                                <div class="val">
+                                    <span>amit@richpanel.com</span>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="row justify-content-between">
+                                <div class="attr">
+                                    <span>First Name</span>
+                                </div>
+                                <div class="val">
+                                    <span>Amit</span>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li>
+                            <div class="row justify-content-between">
+                                <div class="attr">
+                                    <span>Last Name</span>
+                                </div>
+                                <div class="val">
+                                    <span>RG</span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="see-more">
+                        <a href="#">View more details</a>
+                    </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

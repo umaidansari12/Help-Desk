@@ -12,9 +12,10 @@ module.exports = function(moduleName){
         format: combine(
             label({ label: moduleName }),
             timestamp(),
-            customFormat
+            customFormat//,
+           // colorize()
           ),
-        
+        //format:winston.format.json(),
         transports: [
             //
             // - Write all logs with level `error` and below to `error.log`

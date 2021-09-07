@@ -1,6 +1,7 @@
 {
-    "file.not.found":"Requesting for Resource is  Not Found",
-    "facebook.user.register":" User Register SuccessFully",
-    "facebook.user.login":" User Login SuccessFully",
-    "facebook.user.loginfails":"User Login Fails"
+	"file.not.found": "Requesting for Resource is  Not Found",
+	"facebook.user.register": " User Register SuccessFully",
+	"facebook.user.login": " User Login SuccessFully",
+	"facebook.user.loginfails": "User Login Fails",
+	"general.server.error": "Error Occurred! Try again later."
 }

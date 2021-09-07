@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+         var esConnection = new EventSource('https://serene-dawn-33480.herokuapp.com/webhook');
+         console.log("Connection is ", esConnection);
+         esConnection.addEventListener('dmmessage', function(evtArg){
+             console.log('Message Rec ', evtArg);
+         });
+         console.log('After Event ', esConnection);
+
+    </script>
+</head>
+<body>
+    <p>Test Listen</p>
+</body>
+</html>

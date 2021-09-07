@@ -1,19 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
+<!-- Meta Tags -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
 <meta name="description" content="">
 
+<!-- Page Title & Favicon -->
+<title>RichPanel-HelpDesk</title>
 
-<title>Dashboard</title>
-
+<!-- Stylesheets -->
 <link rel="stylesheet" href="assets/stylesheets/main.css">
 
+<!-- Javascript -->
 <script src="https://kit.fontawesome.com/b06605e970.js"></script>
+<script src="scripts/config.js"></script>
+
+<script>
+    window.fbAsyncInit = function () {
+      FB.init({
+        appId: CONFIG.APPID,
+        cookie: true,
+        xfbml: true,
+        version: CONFIG.VERSION,
+      });
+
+      FB.AppEvents.logPageView();
+    };
+
+    (function (d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {
+        return;
+      }
+      js = d.createElement(s);
+      js.id = id;
+      js.src = "https://connect.facebook.net/en_US/sdk.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    })(document, "script", "facebook-jssdk");
+    window.addEventListener('load',function(){
+        FB.api(
+    "/583052006465476/feed",
+    function (response) {
+      if (response && !response.error) {
+          console.log('RESPONSE IS ',response);
+        /* handle the result */
+      }
+    }
+);
+    })
+
+</script>
 </head>
 <body>
+    <%let selected=0%>
 
     <div id="container">
         <div class="row">
@@ -66,7 +107,7 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <a href="#">
+                                <a href="#" onclick="window.location.reload()">
                                     <i class="fas fa-redo"></i>
                                 </a>
                             </div>
@@ -75,7 +116,9 @@
 
                     <div class="conv-list">
                         <ul>
-                            <li class="active">
+                            <%if (convos && convos.length){%>
+                            <%convos.map((convo,i)=>{%>
+                            <li id="convoButton<%=i%>" class="<%=selected===i?"active":""%>" onclick="selectThis(this,<%=i%>,"<%=convo._id%>")">
                                 <div class="row justify-content-between">
                                     <div class="username">
                                         <div class="row align-items-center">
@@ -83,120 +126,84 @@
                                                 <input type="checkbox">
                                             </div>
                                             <div class="name">
-                                                <p>Amit RG</p>
-                                                <span>Facebook DM</span>
+                                                <p><%=convo.userInfo?convo.userInfo.name:""%></p>
+                                                <span>Facebook <%=convo.type.toUpperCase()%> </span>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="time">
-                                        <span>10m</span>
+                                        <span><%=((new Date()-new Date(convo.updatedAt))/60000)>1?parseInt((new Date()-new Date(convo.updatedAt))/60000):1%> m</span>
                                     </div>
                                 </div>
 
                                 <div class="msg">
-                                    <h5>Awesome Product</h5>
+                                    <h5><%=convo.messages && convo.messages.length?convo.messages[0].message.slice(0,30)+"...":""%></h5>
                                     <p>
-                                        Hey There! I probably did one of the best...
+                                       <%=convo.messages && convo.messages.length?convo.messages[convo.messages.length-1].message.slice(0,40)+"...":""%>
                                     </p>
                                 </div>
                             </li>
-
-                            <li>
-                                <div class="row justify-content-between">
-                                    <div class="username">
-                                        <div class="row align-items-center">
-                                            <div class="checkbox">
-                                                <input type="checkbox">
-                                            </div>
-                                            <div class="name">
-                                                <p>Amit RG</p>
-                                                <span>Facebook DM</span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="time">
-                                        <span>10m</span>
-                                    </div>
-                                </div>
-
-                                <div class="msg">
-                                    <h5>Awesome Product</h5>
-                                    <p>
-                                        Hey There! I probably did one of the best...
-                                    </p>
-                                </div>
-                            </li>
+                            <%})%>
+                            <%}%>
                         </ul>
                     </div>
 
                 </div>
             </div>
-            <div class="col-3 col">
+            <div id="chatBox" class="col-3 col">
+                <%if (convos && convos.length){%>
                 <div class="chat-section">
                     <header class="chat-header">
-                        <h3>Amit RG</h3>
+                        <h3><%=convos[selected].userInfo?convos[selected].userInfo.name:""%></h3>
                     </header>
 
                     <main class="chat">
                         <ul>
-                            <li class="clear message cli-msg text-left">
+                             <%convos[selected].messages.map((message,i)=>{%>
+                            <li class="clear message <%=message.sender==='admin'?'reply-msg':'cli-msg'%> text-<%=message.sender==='admin'?'right':'left'%>">
                                 <div class="msg-wrapper">
                                     <div class="row align-items-center">
-                                        <div class="dp">
-                                            <img class="w-100" src="assets/images/user_1.png" alt="dp">
+                                        <%if(message.sender==='user'){%><div class="dp">
+                                            <img class="w-100" src="<%=convos[selected].userInfo?convos[selected].userInfo.profileUrl:'http://localhost:7777/assets/images/user_1.png'%>" alt="dp">
                                         </div>
+                                        <%}%>
                                         <div class="msg-text">
-                                            <p>Is it in stock right now?</p>
-                                            <span>Amit RG - Mar 05, 2:22 AM</span>
+                                            <p><%=message.message%></p>
+                                            <span><%=message.sender==='user' && convos[selected].userInfo.name?convos[selected].userInfo.name:message.sender==='admin' && convos[selected].admin ?convos[selected].admin.name:""%> - <%=new Date(message.timestamp).toLocaleString()%></span>
                                         </div>
+                                        <%if(message.sender==='admin'){%><div class="dp">
+                                            <img class="w-100" src="<%=message.sender==='admin'?'http://localhost:7777/assets/images/user_1.png':'http://localhost:7777/assets/images/user_1.png'%>" alt="dp">
+                                        </div>
+                                         <%}%>
                                     </div>
                                 </div>
                             </li>
+                            <%})%>
 
-                            <li class="clear message reply-msg text-right">
-                                <div class="msg-wrapper">
-                                    <div class="row align-items-center">
-                                        <div class="msg-text">
-                                            <p>We've 3 left in stock!</p>
-                                        </div>
-                                        <div class="dp">
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
 
-                            <li class="clear message reply-msg text-right">
-                                <div class="msg-wrapper">
-                                    <div class="row align-items-center">
-                                        <div class="msg-text">
-                                            <p>If you order before 8pm we can ship it today</p>
-                                            <span>Amit RG - Mar 05, 2:22 AM</span>
-                                        </div>
-                                        <div class="dp">
-                                            <img class="w-100" src="assets/images/user_1.png" alt="dp">
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
+
                         </ul>
                     </main>
 
                     <div class="send-msg">
                         <form action="#">
-                            <input type="text" placeholder="Message Hiten Saxena">
+                            <input type="text" id="sendtxt" placeholder="Message <%=convos[selected].userInfo?convos[selected].userInfo.name:""%>"><button onclick="checkMsg()">Send</button>
                         </form>
                     </div>
 
                 </div>
+                <%}else{%>
+                    <p>No conversations yet!</p>
+                    <%}%>
             </div>
             <div class="col-4 col">
                 <div class="user">
                     <div class="dp">
                         <img class="w-100" src="assets/images/user_1.png" alt="dp">
                     </div>
-                    <h4>Amit RG</h4>
+                    <%if (convos && convos.length){%>
+                    <h4><%=convos[selected].userInfo?convos[selected].userInfo.name:""%></h4>
                     <span class="text-muted">Offline</span>
                     <div class="action">
                         <div class="row justify-content-center">
@@ -212,9 +219,11 @@
                             </div>
                         </div>
                     </div>
+                    <%}%>
                 </div>
 
                 <div class="user-details">
+                    <%if (convos && convos.length){%>
                     <div class="wrapper">
                         <h5>Customer details</h5>
                     <ul>
@@ -224,7 +233,7 @@
                                     <span>Email</span>
                                 </div>
                                 <div class="val">
-                                    <span>amit@richpanel.com</span>
+                                    <span><%=convos[selected].userInfo.name.split(' ')[0].toLowerCase()%>@richpanel.com</span>
                                 </div>
                             </div>
                         </li>
@@ -235,7 +244,7 @@
                                     <span>First Name</span>
                                 </div>
                                 <div class="val">
-                                    <span>Amit</span>
+                                    <span><%=convos[selected].userInfo.name.split(' ')[0]%></span>
                                 </div>
                             </div>
                         </li>
@@ -246,7 +255,7 @@
                                     <span>Last Name</span>
                                 </div>
                                 <div class="val">
-                                    <span>RG</span>
+                                    <span><%=convos[selected].userInfo.name.split(' ')[1]%></span>
                                 </div>
                             </div>
                         </li>
@@ -256,11 +265,198 @@
                         <a href="#">View more details</a>
                     </div>
                     </div>
-
+                    <%}%>
                 </div>
             </div>
         </div>
     </div>
 
 </body>
+<script>
+    var convos = {};
+    var selected =0;
+    var lastSelected = 0;
+    var selectedConversation=  JSON.parse('<%- JSON.stringify(convos) %>') &&  JSON.parse('<%- JSON.stringify(convos) %>').length ?JSON.parse('<%- JSON.stringify(convos[0]) %>'):{};
+    console.log("s",selectedConversation)
+
+
+    function replaceChat(i){
+        console.log("Replacing chat");
+        var input = document.getElementById('sendtxt').value;
+
+        var chatBox = document.getElementById('chatBox');
+        chatBox.removeChild(chatBox.childNodes[0]);
+
+        chatBox.innerHTML=`<div class="chat-section">
+                    <header class="chat-header">
+                        <h3>${selectedConversation.userInfo?selectedConversation.userInfo.name:""}</h3>
+                    </header>
+
+                    <main class="chat">
+                        <ul id="messageList">
+
+
+
+
+                        </ul>
+                    </main>
+
+                    <div class="send-msg">
+                        <form action="#">
+                            <input type="text" id="sendtxt" value="${input}" placeholder="Message ${selectedConversation.userInfo?selectedConversation.userInfo.name:""}"><button onclick="checkMsg()">Send</button>
+                        </form>
+                    </div>
+
+                </div>`;
+        var messageList = document.getElementById('messageList');
+        var messageHtml = '';
+        var messageArray=selectedConversation.messages.map((message,i)=>{
+            messageHtml+= message.sender === 'user'?
+            `<li class="clear message ${message.sender==='admin'?'reply-msg':'cli-msg'} text-${message.sender==='admin'?'right':'left'}">
+                                <div class="msg-wrapper">
+                                    <div class="row align-items-center">
+                                        <div class="dp">
+                                            <img class="w-100" src="${selectedConversation.userInfo?selectedConversation.userInfo.profileUrl:'http://localhost:7777/assets/images/user_1.png'}" alt="dp">
+                                        </div>
+
+                                        <div class="msg-text">
+                                            <p>${message.message}</p>
+                                            <span>${message.sender==='user' && selectedConversation.userInfo.name?selectedConversation.userInfo.name:message.sender==='admin' && selectedConversation.admin ?selectedConversation.admin.name:""} - ${new Date(message.timestamp).toLocaleString()}</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </li>`:`<li class="clear message ${message.sender==='admin'?'reply-msg':'cli-msg'} text-${message.sender==='admin'?'right':'left'}">
+                                <div class="msg-wrapper">
+                                    <div class="row align-items-center">
+
+
+                                        <div class="msg-text">
+                                            <p>${message.message}</p>
+                                            <span>${message.sender==='admin' && selectedConversation.admin ?selectedConversation.admin.name:""} - ${new Date(message.timestamp).toLocaleString()}</span>
+                                        </div>
+                                        <div class="dp">
+                                            <img class="w-100" src="${CONFIG.BASE_URL+'/assets/images/user_1.png'}" alt="dp">
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </li>`
+        });
+
+        messageList.innerHTML = messageHtml;
+        var activeConvoButton = document.getElementById("convoButton"+lastSelected);
+        activeConvoButton.classList.remove("active");
+        lastSelected = i;
+        var selectedConvoButton = document.getElementById("convoButton"+i);
+        selectedConvoButton.classList.add("active");
+    }
+
+    function selectThis(element, i, id) {
+        console.log('I is ', i, id);
+        selected = i;
+
+        var myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/json');
+
+        var raw = JSON.stringify({
+            id,
+        });
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow',
+        };
+
+        fetch(CONFIG.BASE_URL + '/get-convo', requestOptions)
+            .then(response => response.text())
+            .then((result) => {
+                console.log(JSON.parse(result))
+                var data =JSON.parse(result);
+                selectedConversation = data.convo;
+                replaceChat(i);
+            })
+            .catch((error) => console.log('error', error));
+    }
+
+    const sendText = (message)=>{
+        console.log(message)
+        var myHeaders = new Headers();
+        myHeaders.append('Content-Type', 'application/json');
+
+        var raw = JSON.stringify({
+            message,
+            user: selectedConversation.user,
+            userInfo: selectedConversation.userInfo,
+            type:selectedConversation.type,
+            sender:'admin'
+        });
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow',
+        };
+
+        fetch(CONFIG.BASE_URL + '/sendmsg', requestOptions)
+            .then(response => response.text())
+            .then((result) => {
+                console.log(JSON.parse(result))
+                var data =JSON.parse(result);
+                var input = document.getElementById('sendtxt');
+                input.value = "";
+
+
+            })
+            .catch((error) => console.log('error', error));
+    }
+
+    var input = document.getElementById('sendtxt');
+
+    const checkMsg = ()=>{
+        var input = document.getElementById('sendtxt');
+            if(input.value){
+                console.log("EEE")
+                sendText(input.value)
+            }
+
+    }
+
+    // input.addEventListener('keyup', function (event) {
+    //     console.log("PP")
+    //     if (event.keyCode === 13) {
+    //         event.preventDefault();
+    //         if(event.target.value){
+    //             console.log("EEE")
+    //             sendText(event.target.value)
+    //         }
+    //     }
+    // });
+
+    setInterval(()=>{
+        console.log(selected, selectedConversation)
+        if(selected!=undefined && selectedConversation) {
+            console.log(">")
+            selectThis('',selected, selectedConversation._id)
+            var input = document.getElementById('sendtxt');
+
+    // input.addEventListener('keyup', function (event) {
+    //     console.log("PP")
+    //     if (event.keyCode === 13) {
+    //         event.preventDefault();
+    //         if(event.target.value){
+    //             console.log("EEE")
+    //             sendText(event.target.value)
+    //         }
+    //     }
+    // });
+        };
+    },20000)
+
+    window.addEventListener('load',()=>{console.log("U");selectThis('',0,selectedConversation._id)});
+
+</script>
 </html>
